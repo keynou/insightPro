@@ -53,7 +53,7 @@ map<string,int> myStateMap;
 map<string,int>::iterator itMap;
 
 // Defining a comparator function
-typedef std::function<bool(std::pair<std::string, int>, std::pair<std::string, int>)> Comparator;
+//typedef std::function<bool(std::pair<std::string, int>, std::pair<std::string, int>)> Comparator;
 
 // Defining a lambda function to compare two pairs. It will compare two pairs using second field
 // To compare two states. The job that has more number of certified applications will be ranked higher.

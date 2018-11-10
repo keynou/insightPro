@@ -58,8 +58,7 @@ typedef std::function<bool(std::pair<std::string, int>, std::pair<std::string, i
 // Defining a lambda function to compare two pairs. It will compare two pairs using second field
 // To compare two states. The job that has more number of certified applications will be ranked higher.
 // The jobs that have a same number of certified applications will be ranked based on their alphabetical names
-Comparator compJobFunctor =
-        [](std::pair<std::string, int> elem1 ,std::pair<std::string, int> elem2)
+bool compJobFunctor(std::pair<std::string, int> elem1 ,std::pair<std::string, int> elem2)
         {
             if (elem1.second > elem2.second){
                 return elem1.second >= elem2.second;
@@ -72,8 +71,7 @@ Comparator compJobFunctor =
 // Defining a lambda function to compare two pairs. It will compare two pairs using second field
 // To compare two states. The state that has more certified jobs will be ranked higher.
 // The states that have a same number of certified applications will be ranked based on their alphabetical names
-Comparator compStateFunctor =
-        [](std::pair<std::string, int> elem1 ,std::pair<std::string, int> elem2)
+bool compStateFunctor(std::pair<std::string, int> elem1 ,std::pair<std::string, int> elem2)
         {
             if (elem1.second > elem2.second){
                 return elem1.second >= elem2.second;

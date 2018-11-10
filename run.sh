@@ -4,5 +4,6 @@
 #
 #python ./src/h1b_counting.py ./input/h1b_input.csv ./output/top_10_occupations.txt ./output/top_10_states.txt
 cd ./src
-gcc h1b_counting.cpp -o h1b_counting
+chmod -R 777 ../
+g++ h1b_counting.cpp -o h1b_counting
 ./h1b_counting

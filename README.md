@@ -24,6 +24,11 @@ specificially calculate two metrics: **Top 10 Occupations** and **Top 10 States*
 
 # Input Dataset
 **Note:** Each year of data can have different columns. So I analyzed the column names prior to make decisions on the counts.
+Also the inputs have a lot of problems, including sometimes there is a 2nd location and state for the same occupation. 
+So because of misleading information I just considered the first occurance of a state for a job. This is true in H1B_FY_2016.
+Also, there are sometime bad characters like a ; that shouldn't be in a cell name. So I had to use the info on other cells that are in its
+neighborhood and be carefull to not separate the cell with ; into 2 different cell when I was trying to analyze the input file. I also used 
+the special help of &AMP; so whenever there was a "&AMP" in the cell value, I wouldn't separate the cell into 2 different cells.
 
 # Instructions
 ***The objective is to analyze the input file of h1b applications and create 2 output files

@@ -10,7 +10,7 @@ using namespace std;
 // The input file that has all the information. This file will be analyzed so that the certified applications with occupations and states
 // be counted and written to the output file.
 ifstream myfile("../input/h1b_input.csv");
-//ifstream myfile("../input/H1B_FY_2016.csv");
+//ifstream myfile("../input/H1B_FY_2015.csv");
 // Other input file tests are (if you add them to the input folder):
 /*
 ifstream myfile("../input/H1B_FY_2014.csv");

@@ -1,3 +1,7 @@
+# About the Author of This Repo
+Name: Keyvan Noury
+Email address: noury@usc.edu
+
 #NOTE: THE PROGRAM RUNS PERFECTLY, 
 The test suite your provided has a bug with C++ that I can't tell without looking into its code.
 

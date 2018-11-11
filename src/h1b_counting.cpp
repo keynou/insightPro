@@ -45,45 +45,56 @@ int stateJ;
 // And increment variable
 int j;
 
+
+struct myOccupationComparator
+{
+
+    template<typename T>
+	bool operator()(const T& elem1, const T& elem2) const
+	{
+		if (elem1.second > elem2.second){
+            return elem1.second >= elem2.second;
+        }else if (elem1.second == elem2.second){
+            return elem1.first < elem2.first;
+        }else{
+            return false;
+        }
+	}
+};
+struct myStateComparator
+{
+    template<typename T>
+	bool operator()(const T& elem1, const T& elem2) const
+	{
+		if (elem1.second > elem2.second){
+                return elem1.second >= elem2.second;
+        }else if (elem1.second == elem2.second){
+            return elem1.first < elem2.first;
+        }else{
+            return false;
+        }
+	}
+};
+
 // Creating a map of jobs. The key to be the job name and the value to be the number of certified applications for that job.
-map<string,int> myJobMap;
+std::map<std::string, int> myJobMap;
 // Creating a map of states. The key to be the state name and the value to be the number of certified applications for that state.
-map<string,int> myStateMap;
+std::map<std::string, int> myStateMap;
 // An iterator for the maps that just created. We can use this iterator interchangeably.
 map<string,int>::iterator itMap;
 
-// Defining a comparator function
-//typedef std::function<bool(std::pair<std::string, int>, std::pair<std::string, int>)> Comparator;
 
-// Defining a lambda function to compare two pairs. It will compare two pairs using second field
-// To compare two states. The job that has more number of certified applications will be ranked higher.
-// The jobs that have a same number of certified applications will be ranked based on their alphabetical names
-bool compJobFunctor(std::pair<std::string, int> elem1 ,std::pair<std::string, int> elem2)
-        {
-            if (elem1.second > elem2.second){
-                return elem1.second >= elem2.second;
-            }else if (elem1.second == elem2.second){
-                return elem1.first < elem2.first;
-            }else{
-                return false;
-            }
-        };
-// Defining a lambda function to compare two pairs. It will compare two pairs using second field
-// To compare two states. The state that has more certified jobs will be ranked higher.
-// The states that have a same number of certified applications will be ranked based on their alphabetical names
-bool compStateFunctor(std::pair<std::string, int> elem1 ,std::pair<std::string, int> elem2)
-        {
-            if (elem1.second > elem2.second){
-                return elem1.second >= elem2.second;
-            }else if (elem1.second == elem2.second){
-                return elem1.first < elem2.first;
-            }else{
-                return false;
-            }
-        };
 
 void analyzeTheHeaderOfInputFile();
 void readInputFileForStateAndOccuptionMaps (int statusJ, int jobJ, int stateJ);
+
+// Defining a comparator function
+
+
+
+
+
+
 
 int main() {
 
@@ -108,14 +119,14 @@ int main() {
     myfile.close();
 
 
+
     // The maps that we just created, will not be sorted.
     // So we need to sort them in a comparator based on
     // the certified number of applications and the alphabetical order of the names (if the number is equal)
-    std::set<std::pair<std::string, int>, Comparator> jobsSorted(
-			myJobMap.begin(), myJobMap.end(), compJobFunctor);
 
-    std::set<std::pair<std::string, int>, Comparator> statesSorted(
-			myStateMap.begin(), myStateMap.end(), compStateFunctor);
+	std::set<std::pair<std::string,int>, myOccupationComparator> jobsSorted(myJobMap.begin(), myJobMap.end());
+	std::set<std::pair<std::string,int>, myStateComparator> statesSorted(myStateMap.begin(), myStateMap.end());
+
 
 
     // The header for the ranked occupations
@@ -131,7 +142,7 @@ int main() {
     // Now output the jobs with the status of CERTIFIED and the percentage of the CER applications to overall CER applications for that occupation
     for (std::pair<std::string, int> element : jobsSorted){
         if (j<10){
-            //cout << element.first << ";" << element.second << ";" << setprecision(1) << fixed << (double)element.second/jobSums*100 << "%" <<std::endl;
+            cout << element.first << ";" << element.second << ";" << setprecision(1) << fixed << (double)element.second/jobSums*100 << "%" <<std::endl;
             writeJobFile << element.first << ";" << element.second << ";" << setprecision(1) << fixed << (double)element.second/jobSums*100 << "%" <<std::endl;
             j++;
         }else{
@@ -153,7 +164,7 @@ int main() {
     // Now output the states with the status of CERTIFIED and the percentage of the CER applications to overall CER applications for that state name.
     for (std::pair<std::string, int> element : statesSorted){
         if (j<10){
-            //cout << element.first << ";" << element.second << ";" << setprecision(1) << fixed << (double)element.second/stateSums*100 << "%" <<std::endl;
+            cout << element.first << ";" << element.second << ";" << setprecision(1) << fixed << (double)element.second/stateSums*100 << "%" <<std::endl;
             writeStateFile << element.first << ";" << element.second << ";" << setprecision(1) << fixed << (double)element.second/stateSums*100 << "%" <<std::endl;
             j++;
         }else{

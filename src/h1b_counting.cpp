@@ -4,13 +4,13 @@
 #include <set>
 #include <map>
 #include <algorithm>
-#include <functional>
 #include <iomanip>
 using namespace std;
 
-// The input file that has all the information. This file will be analyzed so that the certified applications with jobs and states
+// The input file that has all the information. This file will be analyzed so that the certified applications with occupations and states
 // be counted and written to the output file.
 ifstream myfile("../input/h1b_input.csv");
+//ifstream myfile("../input/H1B_FY_2016.csv");
 // Other input file tests are (if you add them to the input folder):
 /*
 ifstream myfile("../input/H1B_FY_2014.csv");
@@ -19,7 +19,7 @@ ifstream myfile("../input/H1B_FY_2016.csv");
 */
 
 // The output file for the top 10 occupations that have the most number of certified applications
-ofstream writeJobFile;
+ofstream writeOccupationFile;
 // The output file for the top 10 states that have the most number of certified applications
 ofstream writeStateFile;
 
@@ -40,15 +40,21 @@ string status;
 
 // Initializing the header indices for the status to check, the occupation, and the state.
 int statusJ;
-int jobJ;
+int occupationJ;
 int stateJ;
 // And increment variable
 int j;
 
+// Creating a map of occupations. The key to be the occupation name and the value to be the number of certified applications for that occupation.
+std::map<std::string, int> myOccupationMap;
+// Creating a map of states. The key to be the state name and the value to be the number of certified applications for that state.
+std::map<std::string, int> myStateMap;
+// An iterator for the maps that just created. We can use this iterator interchangeably.
+map<string,int>::iterator itMap;
 
-struct myOccupationComparator
+// Define a comparator for the map elements when we put them in a set
+struct myComparator
 {
-
     template<typename T>
 	bool operator()(const T& elem1, const T& elem2) const
 	{
@@ -61,49 +67,20 @@ struct myOccupationComparator
         }
 	}
 };
-struct myStateComparator
-{
-    template<typename T>
-	bool operator()(const T& elem1, const T& elem2) const
-	{
-		if (elem1.second > elem2.second){
-                return elem1.second >= elem2.second;
-        }else if (elem1.second == elem2.second){
-            return elem1.first < elem2.first;
-        }else{
-            return false;
-        }
-	}
-};
 
-// Creating a map of jobs. The key to be the job name and the value to be the number of certified applications for that job.
-std::map<std::string, int> myJobMap;
-// Creating a map of states. The key to be the state name and the value to be the number of certified applications for that state.
-std::map<std::string, int> myStateMap;
-// An iterator for the maps that just created. We can use this iterator interchangeably.
-map<string,int>::iterator itMap;
-
-
-
+// Header names for the functions to use
 void analyzeTheHeaderOfInputFile();
-void readInputFileForStateAndOccuptionMaps (int statusJ, int jobJ, int stateJ);
-
-// Defining a comparator function
-
-
-
-
-
+void readInputFileForStateAndOccuptionMaps (int statusJ, int occupationJ, int stateJ);
 
 
 int main() {
 
     // Initializing the variables
-	writeJobFile.open("../output/top_10_occupations.txt");
+	writeOccupationFile.open("../output/top_10_occupations.txt");
 	writeStateFile.open("../output/top_10_states.txt");
     statusJ = 0;
     stateJ = 0;
-    jobJ = 0;
+    occupationJ = 0;
     lineNum = 0;
     pos = 0;
     j = 0;
@@ -113,7 +90,7 @@ int main() {
     analyzeTheHeaderOfInputFile();
 
     // Here after we know which header indices are the ones that we should count we read the rest of the input file
-    readInputFileForStateAndOccuptionMaps(statusJ, jobJ, stateJ);
+    readInputFileForStateAndOccuptionMaps(statusJ, occupationJ, stateJ);
 
     // Now that we have read the input file, we close it.
     myfile.close();
@@ -123,27 +100,25 @@ int main() {
     // The maps that we just created, will not be sorted.
     // So we need to sort them in a comparator based on
     // the certified number of applications and the alphabetical order of the names (if the number is equal)
-
-	std::set<std::pair<std::string,int>, myOccupationComparator> jobsSorted(myJobMap.begin(), myJobMap.end());
-	std::set<std::pair<std::string,int>, myStateComparator> statesSorted(myStateMap.begin(), myStateMap.end());
-
+	std::set<std::pair<std::string,int>, myComparator> occupationsSorted(myOccupationMap.begin(), myOccupationMap.end());
+	std::set<std::pair<std::string,int>, myComparator> statesSorted(myStateMap.begin(), myStateMap.end());
 
 
     // The header for the ranked occupations
-    writeJobFile << "TOP_OCCUPATIONS;NUMBER_CERTIFIED_APPLICATIONS;PERCENTAGE" << endl;
+    writeOccupationFile << "TOP_OCCUPATIONS;NUMBER_CERTIFIED_APPLICATIONS;PERCENTAGE" << endl;
 
-    // First sum all the jobs' certified application numbers
-    int jobSums = 0;
-    for (std::set<std::pair<std::string,int> >::iterator it=jobsSorted.begin(); it!=jobsSorted.end(); ++it){
-        jobSums += it->second;
+    // First sum all the occupations' certified application numbers
+    int occupationSums = 0;
+    for (std::set<std::pair<std::string,int> >::iterator it=occupationsSorted.begin(); it!=occupationsSorted.end(); ++it){
+        occupationSums += it->second;
     }
 
     j = 0;
-    // Now output the jobs with the status of CERTIFIED and the percentage of the CER applications to overall CER applications for that occupation
-    for (std::set<std::pair<std::string,int> >::iterator it=jobsSorted.begin(); it!=jobsSorted.end(); ++it){
+    // Now output the occupations with the status of CERTIFIED and the percentage of the CER applications to overall CER applications for that occupation
+    for (std::set<std::pair<std::string,int> >::iterator it=occupationsSorted.begin(); it!=occupationsSorted.end(); ++it){
         if (j<10){
-            cout << it->first << ";" << it->second << ";" << setprecision(1) << fixed << (double)it->second/jobSums*100 << "%" <<std::endl;
-            writeJobFile << it->first << ";" << it->second << ";" << setprecision(1) << fixed << (double)it->second/jobSums*100 << "%" <<std::endl;
+            //cout << it->first << ";" << it->second << ";" << setprecision(1) << fixed << (double)it->second/occupationSums*100 << "%" <<std::endl;
+            writeOccupationFile << it->first << ";" << it->second << ";" << setprecision(1) << fixed << (double)it->second/occupationSums*100 << "%" <<std::endl;
             j++;
         }else{
             break;
@@ -164,7 +139,7 @@ int main() {
     // Now output the states with the status of CERTIFIED and the percentage of the CER applications to overall CER applications for that state name.
     for (std::set<std::pair<std::string,int> >::iterator it=statesSorted.begin(); it!=statesSorted.end(); ++it){
         if (j<10){
-            cout  << it->first << ";" << it->second << ";" << setprecision(1) << fixed << (double)it->second/stateSums*100 << "%" <<std::endl;
+            //cout  << it->first << ";" << it->second << ";" << setprecision(1) << fixed << (double)it->second/stateSums*100 << "%" <<std::endl;
             writeStateFile << it->first << ";" << it->second << ";" << setprecision(1) << fixed << (double)it->second/stateSums*100 << "%" <<std::endl;
             j++;
         }else{
@@ -173,7 +148,7 @@ int main() {
     }
 
     // Closing the output files
-    writeJobFile.close();
+    writeOccupationFile.close();
     writeStateFile.close();
     return 0;
 }
@@ -192,7 +167,7 @@ void analyzeTheHeaderOfInputFile(){
                 statusJ = j;
             }
             if (token.find("SOC_NAME") != std::string::npos) {
-                jobJ = j;
+                occupationJ = j;
             }
             if (stateJ == 0 && token.find("WORK") != std::string::npos) {
                     if (token.find("STATE") != std::string::npos) {
@@ -207,11 +182,11 @@ void analyzeTheHeaderOfInputFile(){
 
 
 
-void readInputFileForStateAndOccuptionMaps (int statusJ, int jobJ, int stateJ){
-    // If the appropriate headers existed, we start counting the jobs and states that have a certified application
+void readInputFileForStateAndOccuptionMaps (int statusJ, int occupationJ, int stateJ){
+    // If the appropriate headers existed, we start counting the occupations and states that have a certified application
     // Then the occupation name will be put into a map and the certified applications will add to its value.
     // A similar approach is taken for the states map.
-    if  (jobJ>0 && statusJ>0){
+    if  (occupationJ>0 && statusJ>0){
         while (myfile.peek() != EOF) { // && lineNum<300
             getline(myfile, line);
             j = 0;
@@ -228,20 +203,20 @@ void readInputFileForStateAndOccuptionMaps (int statusJ, int jobJ, int stateJ){
                 if (token.find("&AMP") != std::string::npos){ //token=="" || token == " " ||
                     j--;
                 }
-                // I noticed some of the job files had a extra semicolon as for the employer name, for example for Chase we have "Chase &AMP; CO."
+                // I noticed some of the occupation files had a extra semicolon as for the employer name, for example for Chase we have "Chase &AMP; CO."
                 // So I ignored the token number and decreased the increment that we had done using &AMP symbol wherever applicable.
                 // Then I put the occupation name and state in the maps associated with them.
                 // Putting the occupation in the Map (increment the Value if the Key exist in the map or create the Key in the map if
                 // the Key does n't exist in the Map.
                 // The occupation map
-                if (j==jobJ && status == "CERTIFIED"){
-                    if ( myJobMap.find(token) == myJobMap.end() ){
+                if (j==occupationJ && status == "CERTIFIED"){
+                    if ( myOccupationMap.find(token) == myOccupationMap.end() ){
                         token.erase(std::remove(token.begin(), token.end(), '\"'), token.end());
-                        myJobMap.insert(make_pair(token,0));
+                        myOccupationMap.insert(make_pair(token,0));
                     }
-                    for (itMap = myJobMap.begin();itMap != myJobMap.end();++itMap){
+                    for (itMap = myOccupationMap.begin();itMap != myOccupationMap.end();++itMap){
                         if(itMap->first == token){
-                            myJobMap[itMap->first]++;
+                            myOccupationMap[itMap->first]++;
                         }
                     }
                 }

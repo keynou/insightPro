@@ -134,16 +134,16 @@ int main() {
 
     // First sum all the jobs' certified application numbers
     int jobSums = 0;
-    for (std::pair<std::string, int> element : jobsSorted){
-        jobSums += element.second;
+    for (std::set<std::pair<std::string,int>>::iterator it=jobsSorted.begin(); it!=jobsSorted.end(); ++it){
+        jobSums += it->second;
     }
 
     j = 0;
     // Now output the jobs with the status of CERTIFIED and the percentage of the CER applications to overall CER applications for that occupation
-    for (std::pair<std::string, int> element : jobsSorted){
+    for (std::set<std::pair<std::string,int>>::iterator it=jobsSorted.begin(); it!=jobsSorted.end(); ++it){
         if (j<10){
-            cout << element.first << ";" << element.second << ";" << setprecision(1) << fixed << (double)element.second/jobSums*100 << "%" <<std::endl;
-            writeJobFile << element.first << ";" << element.second << ";" << setprecision(1) << fixed << (double)element.second/jobSums*100 << "%" <<std::endl;
+            cout << it->first << ";" << it->second << ";" << setprecision(1) << fixed << (double)it->second/jobSums*100 << "%" <<std::endl;
+            writeJobFile << it->first << ";" << it->second << ";" << setprecision(1) << fixed << (double)it->second/jobSums*100 << "%" <<std::endl;
             j++;
         }else{
             break;
@@ -156,16 +156,16 @@ int main() {
     // For Sorting the States
     // First sum all the states' certified application numbers
     int stateSums = 0;
-    for (std::pair<std::string, int> element : statesSorted){
-        stateSums += element.second;
+    for (std::set<std::pair<std::string,int>>::iterator it=statesSorted.begin(); it!=statesSorted.end(); ++it){
+        stateSums += it->second;
     }
 
     j = 0;
     // Now output the states with the status of CERTIFIED and the percentage of the CER applications to overall CER applications for that state name.
-    for (std::pair<std::string, int> element : statesSorted){
+    for (std::set<std::pair<std::string,int>>::iterator it=statesSorted.begin(); it!=statesSorted.end(); ++it){
         if (j<10){
-            cout << element.first << ";" << element.second << ";" << setprecision(1) << fixed << (double)element.second/stateSums*100 << "%" <<std::endl;
-            writeStateFile << element.first << ";" << element.second << ";" << setprecision(1) << fixed << (double)element.second/stateSums*100 << "%" <<std::endl;
+            cout  << it->first << ";" << it->second << ";" << setprecision(1) << fixed << (double)it->second/stateSums*100 << "%" <<std::endl;
+            writeStateFile << it->first << ";" << it->second << ";" << setprecision(1) << fixed << (double)it->second/stateSums*100 << "%" <<std::endl;
             j++;
         }else{
             break;

@@ -1,6 +1,6 @@
 # About the Author of This Repo
-Name: Keyvan Noury
-Email address: noury@usc.edu
+*Name: Keyvan Noury
+*Email address: noury@usc.edu
 
 # Table of Contents
 1. [Problem](README.md#problem)

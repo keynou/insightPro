@@ -114,4 +114,5 @@ On success:
     [PASS]: test_1
     [Thu Mar 30 16:25:57 PDT 2017] 1 of 1 tests passed
 
-* I want to just mention that the Repo has been tested on the given <a href="http://ec2-18-210-131-67.compute-1.amazonaws.com/test-my-repo-link" rel="nofollow">website</a> with a 100% match success.
+## Lastly,
+* I just want to mention that the Repo has been tested on the given <a href="http://ec2-18-210-131-67.compute-1.amazonaws.com/test-my-repo-link" rel="nofollow">website</a> with a 100% match success.

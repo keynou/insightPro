@@ -31,7 +31,7 @@ neighborhood and be carefull to not separate the cell with ; into 2 different ce
 the special help of &AMP; so whenever there was a "&AMP" in the cell value, I wouldn't separate the cell into 2 different cells.
 
 # Instructions
-***The objective is to analyze the input file of h1b applications and create 2 output files
+*** The objective is to analyze the input file of h1b applications and create 2 output files.
 
 # Output 
 The program creates 2 output files in the folder of ../output:
@@ -54,8 +54,8 @@ Each line of the `top_10_states.txt` file contains these fields in this order:
 
 The records in this file are sorted by __`NUMBER_CERTIFIED_APPLICATIONS`__ field, and in case of a tie, alphabetically by __`TOP_STATES`__. 
 
-Depending on the input (e.g., see the example below), there may be fewer than 10 lines in each file. There, however, is not more than 10 lines in each file. 
-In case of ties, only list the top 10 based are sorted based on the instructions.
+Depending on the input, there may be fewer than 10 lines in each file. However, there is not more than 10 lines in each file. 
+In case of ties, only I will list the top 10 states or the occupations based on the instructions.
 
 Percentages are rounded off to 1 decimal place. For instance, 1.05% is rounded to 1.1%.
 
@@ -66,7 +66,7 @@ Solution safisfies the following requirements:
 * `README.md` contains Problem, Approach and Run instructions sections
 
 I used C++ to code for the given problem and task.
-a link of my Github or Bitbucket repo with my source code was sent to the insight website.
+a link of my Github repo with my source code was sent to the insight website.
 
 
 ## Repo directory structure
@@ -81,7 +81,7 @@ The directory structure for my repo looks like this:
       ├── output
       |   └── top_10_occupations.txt
       |   └── top_10_states.txt
-      ├── insight_testsuite
+      └── insight_testsuite
           └── run_tests.sh
           └── tests
               └── test_1
@@ -104,7 +104,7 @@ You can run the test with the following command from within the `insight_testsui
 
     insight_testsuite~$ ./run_tests.sh 
 
-On a failed test, the output of `run_tests.sh` should look like:
+On a failed test, the output of `run_tests.sh` looks like this:
 
     [FAIL]: test_1
     [Thu Mar 30 16:28:01 PDT 2017] 0 of 1 tests passed
@@ -114,3 +114,4 @@ On success:
     [PASS]: test_1
     [Thu Mar 30 16:25:57 PDT 2017] 1 of 1 tests passed
 
+* I want to just mention that the Repo has been tested on the given <a href="http://ec2-18-210-131-67.compute-1.amazonaws.com/test-my-repo-link" rel="nofollow">website</a> with a 100% match success.
